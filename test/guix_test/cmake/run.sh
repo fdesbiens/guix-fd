@@ -21,13 +21,15 @@ revision=b37cd4a81a1cb8c2ebefc438220ab7f009e13362
 mkdir -p build
 exec 9>build/dependency.lock
 flock -w 300 9
+fresh_checkout=false
 if [[ ! -d threadx/.git ]]; then
     timeout 180 git clone --no-checkout https://github.com/eclipse-threadx/threadx.git threadx
+    fresh_checkout=true
 fi
 if ! git -C threadx cat-file -e "$revision^{commit}"; then
     timeout 180 git -C threadx fetch origin "$revision"
 fi
-if [[ -n $(git -C threadx status --porcelain --untracked-files=no) ]]; then
+if [[ $fresh_checkout == false && -n $(git -C threadx status --porcelain --untracked-files=no) ]]; then
     echo 'ThreadX checkout contains local modifications.' >&2
     exit 1
 fi
