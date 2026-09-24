@@ -103,6 +103,8 @@ Each test invocation clears old coverage counters and reports. JSON, Cobertura X
 
 `build/build-profiles.txt` and `build/test-profiles.txt` list the requested configurations. Build durations, diagnostics, JUnit results, and the test summary remain under `build`. Test failures propagate to the runner while available coverage is retained. Complete runs enforce the line and branch floors in `coverage_floors.json`. Run `python3 test_report.py` from the CMake test directory to check the report validators.
 
+On hosted Linux runners, the reusable workflow stages compilation across its bounded install, build, and test steps. All configured profiles are still built and tested; the three `build/*-build-times.txt` files record each compilation stage. The test stage runs all CTest profiles concurrently before collecting coverage reports serially.
+
 The Linux regression and three distinct Studio validation jobs run on every pull request to `dev` or `master`. Studio View validates the application without publishing packages. MSIX packaging remains manually dispatched. Pages deployment requires a successful complete run on `master`; required merge checks are administered separately from workflow triggers.
 
 Invalid-input regressions call the `_gxe_` checking entry points explicitly. Valid-input cases also exercise the unchecked public API mappings.

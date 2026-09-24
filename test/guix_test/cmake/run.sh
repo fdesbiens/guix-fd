@@ -12,7 +12,11 @@ set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 export CC=gcc-14 CXX=g++-14
 export CMAKE_BUILD_PARALLEL_LEVEL=${CMAKE_BUILD_PARALLEL_LEVEL:-4}
-export CTEST_PARALLEL_LEVEL=${CTEST_PARALLEL_LEVEL:-4}
+if [[ ${GX_CI_CONCURRENT_TESTS:-0} == 1 ]]; then
+    unset CTEST_PARALLEL_LEVEL
+else
+    export CTEST_PARALLEL_LEVEL=${CTEST_PARALLEL_LEVEL:-4}
+fi
 export CTEST_REPEAT_FAIL=1
 export TX_COVERAGE=ON
 revision=b37cd4a81a1cb8c2ebefc438220ab7f009e13362

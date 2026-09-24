@@ -26,6 +26,9 @@ jobs:
       id-token: write
     uses: eclipse-threadx/threadx/.github/workflows/regression_template.yml@b37cd4a81a1cb8c2ebefc438220ab7f009e13362
     with:
+      install_script: ./scripts/ci_install.sh
+      build_script: ./scripts/ci_build.sh
+      test_script: ./scripts/ci_test.sh
       cmake_path: ./test/guix_test/cmake
       result_affix: GUIX
       coverage_name: merged
